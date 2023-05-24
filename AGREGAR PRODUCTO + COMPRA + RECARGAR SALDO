@@ -1,0 +1,39 @@
+productos = []
+saldo = 0
+usuarios_registrados = []
+usuario_actual = None
+
+def agregar_producto():
+    nombre = input("Ingrese el nombre del producto: ")
+    precio = float(input("Ingrese el precio del producto: "))
+    stock = int(input("Ingrese el stock del producto: "))
+    alcohol = input("El producto contiene alcohol? (si/no): ").lower() == "si"
+    producto = {"nombre": nombre, "precio": precio, "stock": stock, "alcohol": alcohol}
+    productos.append(producto)
+    print("Producto agregado correctamente.")
+
+def ingresar_venta():
+    global saldo
+    print("Productos disponibles:")
+    for i, producto in enumerate(productos):
+        print(f"{i+1}. {producto['nombre']} - {producto['precio']} pesos")
+    opcion = int(input("Ingrese el número del producto que desea comprar: "))
+    producto = productos[opcion-1]
+    if producto['stock'] > 0:
+        if saldo >= producto['precio']:
+            producto['stock'] -= 1
+            saldo -= producto['precio']
+            print(f"Compra realizada con éxito. Su saldo actual es de {saldo} pesos.")
+            opcion2 = input("¿Desea agregar otro producto a la venta? (si/no): ").lower()
+            if opcion2 == "si":
+                ingresar_venta()
+        else:
+            print("No tiene suficiente saldo para comprar este producto.")
+    else:
+        print("Este producto no está disponible en este momento.")
+
+def recargar_saldo():
+    global saldo
+    monto = float(input("Ingrese el monto que desea recargar: "))
+    saldo += monto
+    print(f"Saldo recargado con éxito. Su saldo actual es de {saldo} pesos.")
