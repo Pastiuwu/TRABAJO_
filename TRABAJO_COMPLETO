@@ -1,0 +1,123 @@
+productos = []
+saldo = 0
+usuarios_registrados = []
+usuario_actual = None
+
+def agregar_producto():
+    nombre = input("Ingrese el nombre del producto: ")
+    precio = float(input("Ingrese el precio del producto: "))
+    stock = int(input("Ingrese el stock del producto: "))
+    alcohol = input("El producto contiene alcohol? (si/no): ").lower() == "si"
+    producto = {"nombre": nombre, "precio": precio, "stock": stock, "alcohol": alcohol}
+    productos.append(producto)
+    print("Producto agregado correctamente.")
+
+def ingresar_venta():
+    global saldo
+    print("Productos disponibles:")
+    for i, producto in enumerate(productos):
+        print(f"{i+1}. {producto['nombre']} - {producto['precio']} pesos")
+    opcion = int(input("Ingrese el número del producto que desea comprar: "))
+    producto = productos[opcion-1]
+    if producto['stock'] > 0:
+        if saldo >= producto['precio']:
+            producto['stock'] -= 1
+            saldo -= producto['precio']
+            print(f"Compra realizada con éxito. Su saldo actual es de {saldo} pesos.")
+            opcion2 = input("¿Desea agregar otro producto a la venta? (si/no): ").lower()
+            if opcion2 == "si":
+                ingresar_venta()
+        else:
+            print("No tiene suficiente saldo para comprar este producto.")
+    else:
+        print("Este producto no está disponible en este momento.")
+
+def recargar_saldo():
+    global saldo
+    monto = float(input("Ingrese el monto que desea recargar: "))
+    saldo += monto
+    print(f"Saldo recargado con éxito. Su saldo actual es de {saldo} pesos.")
+
+def register_usuario():
+    print("¡Regístrate!")
+    name = input("Ingrese su nombre: ")
+    rut = input("Ingrese su RUT (Sin puntos): ")
+    fecha = int(input("Ingrese su año de nacimiento: "))
+    contraseña = input("Ingrese una contraseña: ")
+    registrar_usuario(name, contraseña, rut, fecha)
+    print("Bienvenido,", name)
+
+def login_usuario():
+    global usuario_actual
+    name = input("Ingrese su nombre de usuario: ")
+    contraseña = input("Ingrese su contraseña: ")
+    usuario_actual = iniciar_sesion(name, contraseña)
+
+    if usuario_actual:
+        print("Inicio de sesión exitoso. ¡Bienvenido, {}!".format(name))
+    else:
+        print("Nombre de usuario o contraseña incorrectos.")
+
+def verificar_login():
+    if usuario_actual is None:
+        print("No estás logueado. Por favor, crea un usuario o inicia sesión.")
+        return False
+    else:
+        return True
+
+def cerrar_sesion():
+    global usuario_actual
+    usuario_actual = None
+    print("Sesión cerrada. ¡Hasta luego!")
+
+def iniciar_sesion(nombre, contraseña):
+    for usuario in usuarios_registrados:
+        if usuario["nombre"] == nombre and usuario["contraseña"] == contraseña:
+            return usuario
+    
+    return None
+
+def registrar_usuario(name, contraseña, rut, fecha):
+    usuario = {"nombre": name, "contraseña": contraseña, "rut": rut, "fecha": fecha}
+    usuarios_registrados.append(usuario)
+    print("¡Registro exitoso! Usuario {} registrado.".format(name))
+
+while True:
+    print("¡Bienvenido!")
+    print("1- Registrar")
+    print("2- Iniciar sesión")
+    print("3- Cerrar sesión")
+    print("0- Salir")
+
+    opciones = input("Seleccione una opción: ")
+    if opciones == "1":
+        register_usuario()
+    elif opciones == "2":
+        login_usuario()
+    elif opciones == "3":
+        cerrar_sesion()
+    elif opciones == "0":
+        print("¡Hasta pronto!")
+        
+    else:
+        print("Opción inválida, seleccione una opción válida.")
+    
+    if verificar_login():
+        while True:
+            print("Bienvenido/a a la tienda")
+            print("1. Agregar producto")
+            print("2. Ingresar venta")
+            print("3. Recargar saldo")
+            print("4. Salir")
+            opcion = int(input("Ingrese el número de la opción que desea realizar: "))
+            if opcion == 1:
+                agregar_producto()
+            elif opcion == 2:
+                ingresar_venta()
+            elif opcion == 3:
+                recargar_saldo()
+            elif opcion == 4:
+                print("Gracias por visitar la tienda")
+                break
+            else:
+                print("Opción inválida. Intente de nuevo.")
