@@ -1,0 +1,43 @@
+def register_usuario():
+    print("¡Regístrate!")
+    name = input("Ingrese su nombre: ")
+    rut = input("Ingrese su RUT (Sin puntos): ")
+    fecha = int(input("Ingrese su año de nacimiento: "))
+    contraseña = input("Ingrese una contraseña: ")
+    registrar_usuario(name, contraseña, rut, fecha)
+    print("Bienvenido,", name)
+
+def login_usuario():
+    global usuario_actual
+    name = input("Ingrese su nombre de usuario: ")
+    contraseña = input("Ingrese su contraseña: ")
+    usuario_actual = iniciar_sesion(name, contraseña)
+
+    if usuario_actual:
+        print("Inicio de sesión exitoso. ¡Bienvenido, {}!".format(name))
+    else:
+        print("Nombre de usuario o contraseña incorrectos.")
+
+def verificar_login():
+    if usuario_actual is None:
+        print("No estás logueado. Por favor, crea un usuario o inicia sesión.")
+        return False
+    else:
+        return True
+
+def cerrar_sesion():
+    global usuario_actual
+    usuario_actual = None
+    print("Sesión cerrada. ¡Hasta luego!")
+
+def iniciar_sesion(nombre, contraseña):
+    for usuario in usuarios_registrados:
+        if usuario["nombre"] == nombre and usuario["contraseña"] == contraseña:
+            return usuario
+    
+    return None
+
+def registrar_usuario(name, contraseña, rut, fecha):
+    usuario = {"nombre": name, "contraseña": contraseña, "rut": rut, "fecha": fecha}
+    usuarios_registrados.append(usuario)
+    print("¡Registro exitoso! Usuario {} registrado.".format(name))
