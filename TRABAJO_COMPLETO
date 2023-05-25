@@ -1,3 +1,5 @@
+# pip install qrcode
+
 import qrcode
 import tempfile
 
@@ -5,6 +7,7 @@ productos = []
 saldo = 0
 usuarios_registrados = []
 usuario_actual = None
+
 
 
 
@@ -57,7 +60,7 @@ def recargar_saldo():
     global saldo
     monto = float(input("Ingrese el monto que desea recargar: "))
     saldo += monto
-    print("Saldo recargado con éxito. Su saldo actual es de {saldo} pesos.")
+    print("Saldo recargado con éxito. Su saldo actual es de ", (saldo) , "pesos.")
 
 # Perfil Usuario
 def perfil_usuario():
@@ -120,6 +123,7 @@ def registrar_usuario(name, contraseña, rut, fecha):
     usuarios_registrados.append(usuario)
     print("¡Registro exitoso! Usuario {} registrado.".format(name))
 
+
 # Menu de opciones al entrar al programa.
 while True:
     print("¡Bienvenido!")
@@ -166,4 +170,3 @@ while True:
                 break
             else:
                 print("Opción inválida. Intente de nuevo.")
-
